@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background: url('https://cdn.pixabay.com/photo/2016/11/29/04/17/background-1868498_1280.jpg') no-repeat center center fixed;
+            background-size: cover;
+        }
+        .quiz-container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 20%;
+            max-width: 500px;
+            text-align: center;
+        }
+        .question {
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+        .options {
+            margin-bottom: 20px;
+        }
+        .options button {
+            display: block;
+            margin: 10px auto;
+            padding: 10px 15px;
+            font-size: 16px;
+            background-color: green;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            max-width: 200px;
+        }
+        .options button:hover {
+            background-color: #0056b3;
+        }
+        .score {
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="quiz-container" id="quiz-container">
+        <div class="question" id="question">Loading...</div>
+        <div class="options" id="options"></div>
+        <div class="score" id="score" style="display: none;"></div>
+    </div>
+
+    <script>
+        // Quiz data
+        const quizData = [
+            {
+                question: "What is the name of the planet we live on?",
+                options: ["Mars", "Jupiter", "Earth", "None of the above"],
+                answer: "Earth",
+            },
+            {
+                question: "What is the capital of India?",
+                options: ["Mumbai", "Hyderabad", "Tamil Nadu", "New Delhi"],
+                answer: "New Delhi",
+            },
+            {
+                question: "What is 5 + 3?",
+                options: ["5", "7", "8", "10"],
+                answer: "8",
+            },
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        const questionElement = document.getElementById("question");
+        const optionsElement = document.getElementById("options");
+        const scoreElement = document.getElementById("score");
+
+        function loadQuestion() {
+            if (currentQuestionIndex < quizData.length) {
+                const currentQuestion = quizData[currentQuestionIndex];
+                questionElement.innerText = currentQuestion.question;
+
+                optionsElement.innerHTML = "";
+                currentQuestion.options.forEach((option) => {
+                    const button = document.createElement("button");
+                    button.innerText = option;
+                    button.onclick = () => checkAnswer(option);
+                    optionsElement.appendChild(button);
+                });
+            } else {
+                showScore();
+            }
+        }
+
+        function checkAnswer(selectedOption) {
+            const correctAnswer = quizData[currentQuestionIndex].answer;
+            if (selectedOption === correctAnswer) {
+                score++;
+            }
+            currentQuestionIndex++;
+            loadQuestion();
+        }
+
+        function showScore() {
+            questionElement.style.display = "none";
+            optionsElement.style.display = "none";
+            scoreElement.style.display = "block";
+            scoreElement.innerText = `Your score: ${score} / ${quizData.length}`;
+        }
+
+        // Initialize quiz
+        loadQuestion();
+    </script>
+
+</body>
+</html>
